@@ -15,6 +15,8 @@ void contTxt();
 void ordTxt();
 void eliminar(const char *archOri, char* archTemp);
 int buscarPalabra(char *pal);
+void auxcontTxt(char *pal, int valor);
+void imprimirOcurrencias();
 
 int main() {
     char strS[20] = "comida";
@@ -159,51 +161,77 @@ diccionario palabras[200];
 
 
 void contTxt() {
-
-    int contOcur;
-    int contLi;
-    int linea;
-
-    strcpy(palabras[0].palabra, "hola");
-    strcpy(palabras[1].palabra, "mundo");
-    palabras[0].conteoAparicion[0] = 3;
-    palabras[1].conteoAparicion[0] = 2;
-    int indice = buscarPalabra("hola");
-    if (indice != -1) {
-        printf("La palabra 'hola' existe en el diccionario. Índice: %d\n", indice);
-    } else {
-        printf("La palabra 'hola' no existe en el diccionario.\n");
-    }
-
+    int valor = -1;  // Inicializar el valor en -1
     char archivoTemporal[50];
     eliminar("test.txt", archivoTemporal);
     FILE *archivo;
     char linea[1000];
-    char* token;
-    int contAp;
+    char* token1;
 
     archivo = fopen("temp.txt", "r");
     if (archivo == NULL) {
         printf("No se pudo abrir el archivo.\n");
-        
+        return;
     }
 
-    // Leer línea por línea
     while (fgets(linea, sizeof(linea), archivo) != NULL) {
         // Procesar cada línea
-        printf("Línea: %s", linea);
-
+        //printf("Línea: %s", linea);
+        
         // Leer palabra por palabra
-        token = strtok(linea, " ");
-        while (token != NULL) {
+        token1 = strtok(linea, " ");
+        while (token1 != NULL) {
             // Procesar cada palabra
-            printf("Palabra: %s\n", token);
-            token = strtok(NULL, " ");
+            int indice = buscarPalabra(token1);
+            if (indice == -1) {
+                valor++;
+                strcpy(palabras[valor].palabra, token1);  // Agregar la palabra al diccionario
+                auxcontTxt(token1, valor);
+            } else {
+                auxcontTxt(token1, indice);  // Actualizar la aparición de la palabra existente
+            }
+            printf("Palabra: %s\n", token1);
+            token1 = strtok(NULL, " ");
         }
     }
 
+    imprimirOcurrencias();
     fclose(archivo);
 }
+
+void auxcontTxt(char *pal, int valor) {
+    int contOcur = 0;
+    int contLi = 0;
+    int indiceAparicion = 0;
+    
+    FILE *archivo;
+    char linea[1000];
+    char* token1;
+
+    archivo = fopen("temp.txt", "r");
+    if (archivo == NULL) {
+        printf("No se pudo abrir el archivo.\n");
+        return;
+    }
+    
+    while (fgets(linea, sizeof(linea), archivo) != NULL) {
+        contLi++;
+        token1 = strtok(linea, " ");
+        while (token1 != NULL) {
+            if (strcmp(pal, token1) == 0) {
+                contOcur++;
+                palabras[valor].aparicionPorLinea[indiceAparicion] = contLi;
+                indiceAparicion++;
+            }
+            token1 = strtok(NULL, " ");
+        }
+    }
+
+    palabras[valor].conteoAparicion[0] = contOcur;  // Actualizar el conteo total de apariciones
+
+    fclose(archivo);
+}
+
 
 int buscarPalabra(char *pal) {
     
@@ -257,13 +285,28 @@ void eliminar(const char* archivo, char* archivoTemporal) {
     strcpy(archivoTemporal, archivoTemporalUnico);
 }
 
-
 //recordar eliminar el texto temp.
 
-void LeerA(){
-
+void imprimirOcurrencias() {
+    printf("entra a ocurrencias.\n");
+    int i, j;
+    for (i = 0; i < 200; i++) {
+        if (palabras[i].palabra[0] != '\0') {
+            printf("%s: ", palabras[i].palabra);
+            int numOcurrencias = palabras[i].conteoAparicion[0]; // Obtener el número de ocurrencias
+            for (j = 0; j < numOcurrencias; j++) { // Utilizar numOcurrencias en la condición del bucle
+                printf("%d", palabras[i].aparicionPorLinea[j]);
+                if (j < numOcurrencias - 1) { // Comparar j con numOcurrencias
+                    printf(", ");
+                }
+            }
+            printf("\n");
+        }
+    }
 }
 
+void LeerA(){
+}
 
 //..........................................................................................8
 
