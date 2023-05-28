@@ -17,12 +17,11 @@ void eliminar(const char *archOri, char* archTemp);
 int buscarPalabra(char *pal);
 void auxcontTxt(char *pal, int valor);
 void imprimirOcurrencias();
+void imprimirDiccionario();
 
 int main() {
     char strS[20] = "comida";
     char strP[] = "food";
-
-
     //kiloMilla();                                                                  //1. De km a millas en un rango de [1-10].
     //centFaren();                                                                  //2. De centigrados a farenheit con un valor de entrada.
     //contT(212387050);                                                             //3. cantidad de digitos de un numero entero.
@@ -30,9 +29,8 @@ int main() {
     //strcmp(strS, strP);
     //printf("El resultado de la comparación es: %d\n", Strcmp(strP, strS));        //5. compara largo de string
     //Strcat(strS, strP);                                                           //6. La función pega al final del string dest el valor del string src
-    //contTxt();                                                                      //7. # de linea en que aparecen palabras. Elimina palabras como el, la, los, y, etc
-    ordTxt();    
-                                                                       //8.imprime las distintas palabras ordenadas en forma descendente de acuerdo con su frecuencia de ocurrencia
+    //contTxt();                                                                    //7. # de linea en que aparecen palabras. Elimina palabras como el, la, los, y, etc
+    //ordTxt();                                                                     //8.imprime las distintas palabras ordenadas en forma descendente de acuerdo con su frecuencia de ocurrencia
     
     return 0;
 }
@@ -303,31 +301,29 @@ void imprimirOcurrencias() {
 
 //..........................................................................................8
 
-
-
 void ordTxt(){
     globalOccur=0;
     contTxt();
-    int x =0, y = 0;
-    diccionario tmp;
-    for (x = 0; x < tDiccionario; x++) {   // loop n times - 1 per element
-        for (y = 0; y < tDiccionario - x - 1; y++) { // last i elements are sorted already
-            if (palabras[y].conteoAparicion[y] > palabras[y + 1].conteoAparicion[0]) {  // swop if order is broken
-                tmp = palabras[y];
-                palabras[y] = palabras[y + 1];
-                palabras[y + 1] = tmp;
+
+    printf("Diccionario ordenado por conteo de apariciones:\n");
+    //ordenado con buble
+    for (int i = 0; i < tDiccionario - 1; i++) {
+        for (int j = 0; j < tDiccionario - i - 1; j++) {
+            if (palabras[j].conteoAparicion[0] < palabras[j + 1].conteoAparicion[0]) {
+                diccionario tmp = palabras[j];
+                palabras[j] = palabras[j + 1];
+                palabras[j + 1] = tmp;
             }
         }
     }
-
-    int i, j;
-    for (i = 0; i < 200; i++) {
+    
+    // Imprimir el diccionario ordenado
+    for (int i = 0; i < tDiccionario; i++) {
         if (palabras[i].palabra[0] != '\0') {
             printf("%s: ", palabras[i].palabra);
-            printf("%d ",palabras[i].conteoAparicion[0]);
-            int numOcurrencias = palabras[i].conteoAparicion[0]; // Obtener el número de ocurrencias
-            
+            printf("%d ", palabras[i].conteoAparicion[0]);
             printf("\n");
         }
     }
+globalOccur=1;
 }
