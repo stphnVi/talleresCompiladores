@@ -159,7 +159,7 @@ typedef struct{
 
 diccionario palabras[200];
 
-
+//funcion que procesa el nuevo archivo para armar el nuevo diccionario
 void contTxt() {
     int valor = -1;  // Inicializar el valor en -1
     char archivoTemporal[50];
@@ -175,10 +175,8 @@ void contTxt() {
     }
 
     char x[1024];
-    /* assumes no word exceeds length of 1023 */
+    /* asume que una palabra no exceda un largo de 1023 */
     while (fscanf(archivo, " %1023s", x) == 1) {
-        
-        
             // Procesar cada palabra
             int indice = buscarPalabra(x);
             if (indice == -1) {
@@ -189,15 +187,13 @@ void contTxt() {
                 auxcontTxt(x, indice);  // Actualizar la aparición de la palabra existente
             }
             //printf("Palabra: %s\n", x);
-           
-        
-
     }
 
     imprimirOcurrencias();
     fclose(archivo);
 }
 
+//funcion auxiliar de conTxt que actualiza el diccionario si la palabra no es repetida
 void auxcontTxt(char *pal, int valor) {
     int contOcur = 0;
     int contLi = 0;
@@ -206,6 +202,7 @@ void auxcontTxt(char *pal, int valor) {
     FILE *archivo;
     char linea[1000];
     char* token1;
+    char* saveptr;
 
     archivo = fopen("temp.txt", "r");
     if (archivo == NULL) {
@@ -215,26 +212,23 @@ void auxcontTxt(char *pal, int valor) {
     
     while (fgets(linea, sizeof(linea), archivo) != NULL) {
         contLi++;
-        token1 = strtok(linea, " ");
+        token1 = strtok_r(linea, " \n", &saveptr);
         while (token1 != NULL) {
             if (strcmp(pal, token1) == 0) {
                 contOcur++;
-                palabras[valor].aparicionPorLinea[indiceAparicion] = contLi;
-                indiceAparicion++;
+                palabras[valor].conteoAparicion[0] = contOcur;
+                palabras[valor].aparicionPorLinea[contOcur-1] = contLi;
             }
-            token1 = strtok(NULL, " ");
+            token1 = strtok_r(NULL, " \n", &saveptr);
         }
     }
-
     palabras[valor].conteoAparicion[0] = contOcur;  // Actualizar el conteo total de apariciones
 
     fclose(archivo);
 }
 
-
+// busca palabras en el diccionario para asegurar que no se repitan
 int buscarPalabra(char *pal) {
-    
-    // Inicializar la estructura con datos de ejemplo
     for (int i = 0; i < 200; i++) {
         if (strcmp(palabras[i].palabra, pal) == 0) {
             return i;  // Retorna el índice de la palabra encontrada
@@ -244,17 +238,14 @@ int buscarPalabra(char *pal) {
     
 }
 
-// elimina las palabras el, la, los, y, etc del texto de test.txt y lo reescribe en temp.txt para evaluar
-
+// elimina las palabras el, la, los, y, etc del texto de test.txt y lo reescribe en temp.txt para evalua
 void eliminar(const char* archivo, char* archivoTemporal) {
     FILE* archivoOriginal = fopen(archivo, "r");
     FILE* temporal;
-
     if (archivoOriginal == NULL) {
         printf("No se puede abrir el archivo.\n");
         return;
     }
-
     char archivoTemporalUnico[50];
     int i = 1;
     while (1) {
@@ -265,8 +256,8 @@ void eliminar(const char* archivo, char* archivoTemporal) {
         }
         i++;
     }
-
     char linea[1000];
+
     while (fgets(linea, sizeof(linea), archivoOriginal) != NULL) {
         char* palabra;
         char* token = strtok(linea, " ");
@@ -284,14 +275,14 @@ void eliminar(const char* archivo, char* archivoTemporal) {
     strcpy(archivoTemporal, archivoTemporalUnico);
 }
 
-//recordar eliminar el texto temp.
+//imprime ocurrencias en cada oracion del tecto de una palabra.
 
 void imprimirOcurrencias() {
-    printf("entra a ocurrencias.\n");
     int i, j;
     for (i = 0; i < 200; i++) {
         if (palabras[i].palabra[0] != '\0') {
             printf("%s: ", palabras[i].palabra);
+            //printf("Apariciones: %d ", palabras[i].conteoAparicion[0]);
             int numOcurrencias = palabras[i].conteoAparicion[0]; // Obtener el número de ocurrencias
             for (j = 0; j < numOcurrencias; j++) { // Utilizar numOcurrencias en la condición del bucle
                 printf("%d", palabras[i].aparicionPorLinea[j]);
@@ -304,11 +295,12 @@ void imprimirOcurrencias() {
     }
 }
 
-void LeerA(){
-}
 
 //..........................................................................................8
 
-/*void ordTxt(){
-
-}*/
+void ordTxt(){
+    contTxt();
+    
+    int n = sizeof(palabras[0].conteoAparicion[0]);
+    printf("Apariciones: %d ", n);
+}
