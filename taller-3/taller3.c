@@ -174,25 +174,24 @@ void contTxt() {
         return;
     }
 
-    while (fgets(linea, sizeof(linea), archivo) != NULL) {
-        // Procesar cada línea
-        //printf("Línea: %s", linea);
+    char x[1024];
+    /* assumes no word exceeds length of 1023 */
+    while (fscanf(archivo, " %1023s", x) == 1) {
         
-        // Leer palabra por palabra
-        token1 = strtok(linea, " ");
-        while (token1 != NULL) {
+        
             // Procesar cada palabra
-            int indice = buscarPalabra(token1);
+            int indice = buscarPalabra(x);
             if (indice == -1) {
                 valor++;
-                strcpy(palabras[valor].palabra, token1);  // Agregar la palabra al diccionario
-                auxcontTxt(token1, valor);
+                strcpy(palabras[valor].palabra, x);  // Agregar la palabra al diccionario
+                auxcontTxt(x, valor);
             } else {
-                auxcontTxt(token1, indice);  // Actualizar la aparición de la palabra existente
+                auxcontTxt(x, indice);  // Actualizar la aparición de la palabra existente
             }
-            printf("Palabra: %s\n", token1);
-            token1 = strtok(NULL, " ");
-        }
+            //printf("Palabra: %s\n", x);
+           
+        
+
     }
 
     imprimirOcurrencias();
