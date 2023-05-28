@@ -14,6 +14,7 @@ void Strcat(char *dest, char *src);
 void contTxt();
 void ordTxt();
 void eliminar(const char *archOri, char* archTemp);
+int buscarPalabra(char *pal);
 
 int main() {
     char strS[20] = "comida";
@@ -154,7 +155,26 @@ typedef struct{
     int conteoAparicion[50];
 }diccionario;
 
+diccionario palabras[200];
+
+
 void contTxt() {
+
+    int contOcur;
+    int contLi;
+    int linea;
+
+    strcpy(palabras[0].palabra, "hola");
+    strcpy(palabras[1].palabra, "mundo");
+    palabras[0].conteoAparicion[0] = 3;
+    palabras[1].conteoAparicion[0] = 2;
+    int indice = buscarPalabra("hola");
+    if (indice != -1) {
+        printf("La palabra 'hola' existe en el diccionario. Índice: %d\n", indice);
+    } else {
+        printf("La palabra 'hola' no existe en el diccionario.\n");
+    }
+
     char archivoTemporal[50];
     eliminar("test.txt", archivoTemporal);
     FILE *archivo;
@@ -183,6 +203,18 @@ void contTxt() {
     }
 
     fclose(archivo);
+}
+
+int buscarPalabra(char *pal) {
+    
+    // Inicializar la estructura con datos de ejemplo
+    for (int i = 0; i < 200; i++) {
+        if (strcmp(palabras[i].palabra, pal) == 0) {
+            return i;  // Retorna el índice de la palabra encontrada
+        }
+    }
+    return -1;  // La palabra no se encuentra en el diccionario
+    
 }
 
 // elimina las palabras el, la, los, y, etc del texto de test.txt y lo reescribe en temp.txt para evaluar
@@ -226,7 +258,7 @@ void eliminar(const char* archivo, char* archivoTemporal) {
 }
 
 
-
+//recordar eliminar el texto temp.
 
 void LeerA(){
 
