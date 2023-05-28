@@ -30,8 +30,8 @@ int main() {
     //strcmp(strS, strP);
     //printf("El resultado de la comparación es: %d\n", Strcmp(strP, strS));        //5. compara largo de string
     //Strcat(strS, strP);                                                           //6. La función pega al final del string dest el valor del string src
-    contTxt();                                                                      //7. # de linea en que aparecen palabras. Elimina palabras como el, la, los, y, etc
-    //ordTxt();    
+    //contTxt();                                                                      //7. # de linea en que aparecen palabras. Elimina palabras como el, la, los, y, etc
+    ordTxt();    
                                                                        //8.imprime las distintas palabras ordenadas en forma descendente de acuerdo con su frecuencia de ocurrencia
     
     return 0;
@@ -147,8 +147,8 @@ void Strcat(char *dest, char *src){
 
 //..........................................................................................7
 
-/* para usar esta funcion probar el texto en test.txt o bien cambiarlo en la funcion
-para poder eliminar las palabras solicitadas*/
+/* para usar esta funcion probar el texto con test.txt o bien cambiarlo en la funcion contTxt en la linea
+166 para poder eliminar las palabras solicitadas*/
 
 
 typedef struct{
@@ -157,7 +157,9 @@ typedef struct{
     int conteoAparicion[50];
 }diccionario;
 
-diccionario palabras[200];
+diccionario palabras[500];
+
+int globalOccur =1;
 
 //funcion que procesa el nuevo archivo para armar el nuevo diccionario
 void contTxt() {
@@ -188,8 +190,10 @@ void contTxt() {
             }
             //printf("Palabra: %s\n", x);
     }
-
-    imprimirOcurrencias();
+    if (globalOccur==1){
+        imprimirOcurrencias();
+    }
+    
     fclose(archivo);
 }
 
@@ -226,7 +230,7 @@ void auxcontTxt(char *pal, int valor) {
 
     fclose(archivo);
 }
-
+int tDiccionario = 0;
 // busca palabras en el diccionario para asegurar que no se repitan
 int buscarPalabra(char *pal) {
     for (int i = 0; i < 200; i++) {
@@ -234,6 +238,7 @@ int buscarPalabra(char *pal) {
             return i;  // Retorna el índice de la palabra encontrada
         }
     }
+    tDiccionario++;
     return -1;  // La palabra no se encuentra en el diccionario
     
 }
@@ -282,7 +287,7 @@ void imprimirOcurrencias() {
     for (i = 0; i < 200; i++) {
         if (palabras[i].palabra[0] != '\0') {
             printf("%s: ", palabras[i].palabra);
-            //printf("Apariciones: %d ", palabras[i].conteoAparicion[0]);
+            printf("Apariciones: %d ", palabras[i].conteoAparicion[0]);
             int numOcurrencias = palabras[i].conteoAparicion[0]; // Obtener el número de ocurrencias
             for (j = 0; j < numOcurrencias; j++) { // Utilizar numOcurrencias en la condición del bucle
                 printf("%d", palabras[i].aparicionPorLinea[j]);
@@ -298,9 +303,31 @@ void imprimirOcurrencias() {
 
 //..........................................................................................8
 
+
+
 void ordTxt(){
+    globalOccur=0;
     contTxt();
-    
-    int n = sizeof(palabras[0].conteoAparicion[0]);
-    printf("Apariciones: %d ", n);
+    int x =0, y = 0;
+    diccionario tmp;
+    for (x = 0; x < tDiccionario; x++) {   // loop n times - 1 per element
+        for (y = 0; y < tDiccionario - x - 1; y++) { // last i elements are sorted already
+            if (palabras[y].conteoAparicion[y] > palabras[y + 1].conteoAparicion[0]) {  // swop if order is broken
+                tmp = palabras[y];
+                palabras[y] = palabras[y + 1];
+                palabras[y + 1] = tmp;
+            }
+        }
+    }
+
+    int i, j;
+    for (i = 0; i < 200; i++) {
+        if (palabras[i].palabra[0] != '\0') {
+            printf("%s: ", palabras[i].palabra);
+            printf("%d ",palabras[i].conteoAparicion[0]);
+            int numOcurrencias = palabras[i].conteoAparicion[0]; // Obtener el número de ocurrencias
+            
+            printf("\n");
+        }
+    }
 }
