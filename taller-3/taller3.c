@@ -26,12 +26,10 @@ int main() {
     //centFaren();                                                                  //2. De centigrados a farenheit con un valor de entrada.
     //contT(212387050);                                                             //3. cantidad de digitos de un numero entero.
     //contP(212387050);                                                             //4. cantidad de digitos pares en un numero entero.
-    //strcmp(strS, strP);
     //printf("El resultado de la comparación es: %d\n", Strcmp(strP, strS));        //5. compara largo de string
     //Strcat(strS, strP);                                                           //6. La función pega al final del string dest el valor del string src
     //contTxt();                                                                    //7. # de linea en que aparecen palabras. Elimina palabras como el, la, los, y, etc
     //ordTxt();                                                                     //8.imprime las distintas palabras ordenadas en forma descendente de acuerdo con su frecuencia de ocurrencia
-    
     return 0;
 }
 
@@ -159,7 +157,7 @@ diccionario palabras[500];
 
 int globalOccur =1;
 
-//funcion que procesa el nuevo archivo para armar el nuevo diccionario
+//función que procesa el nuevo archivo para armar el diccionario
 void contTxt() {
     int valor = -1;  // Inicializar el valor en -1
     char archivoTemporal[50];
@@ -195,7 +193,7 @@ void contTxt() {
     fclose(archivo);
 }
 
-//funcion auxiliar de conTxt que actualiza el diccionario si la palabra no es repetida
+//función auxiliar de conTxt que actualiza el diccionario si la palabra no es repetida
 void auxcontTxt(char *pal, int valor) {
     int contOcur = 0;
     int contLi = 0;
@@ -233,7 +231,7 @@ int tDiccionario = 0;
 int buscarPalabra(char *pal) {
     for (int i = 0; i < 200; i++) {
         if (strcmp(palabras[i].palabra, pal) == 0) {
-            return i;  // Retorna el índice de la palabra encontrada
+            return i;  
         }
     }
     tDiccionario++;
@@ -241,7 +239,7 @@ int buscarPalabra(char *pal) {
     
 }
 
-// elimina las palabras el, la, los, y, etc del texto de test.txt y lo reescribe en temp.txt para evalua
+// elimina las palabras el, la, los, y, etc del texto de test.txt y lo reescribe en temp.txt para evaluar
 void eliminar(const char* archivo, char* archivoTemporal) {
     FILE* archivoOriginal = fopen(archivo, "r");
     FILE* temporal;
@@ -285,9 +283,8 @@ void imprimirOcurrencias() {
     for (i = 0; i < 200; i++) {
         if (palabras[i].palabra[0] != '\0') {
             printf("%s: ", palabras[i].palabra);
-            printf("Apariciones: %d ", palabras[i].conteoAparicion[0]);
             int numOcurrencias = palabras[i].conteoAparicion[0]; // Obtener el número de ocurrencias
-            for (j = 0; j < numOcurrencias; j++) { // Utilizar numOcurrencias en la condición del bucle
+            for (j = 0; j < numOcurrencias; j++) {
                 printf("%d", palabras[i].aparicionPorLinea[j]);
                 if (j < numOcurrencias - 1) { // Comparar j con numOcurrencias
                     printf(", ");
@@ -297,7 +294,6 @@ void imprimirOcurrencias() {
         }
     }
 }
-
 
 //..........................................................................................8
 
