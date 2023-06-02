@@ -16,12 +16,12 @@ public class Parallelogram extends FiguraGeometrica {
     }
 
     public float GetPerimeter() {
-        return 0.0f;
+        return (int) ((base * 2) + (side * 2));
 
     }
 
     public float GetArea() {
-        return 0.0f;
+        return (int) (base * height);
     }
 
 }

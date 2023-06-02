@@ -14,12 +14,12 @@ public class Rectangle extends FiguraGeometrica {
     }
 
     public float GetPerimeter() {
-        return 0.0f;
+        return (int) ((width * 2) + (large * 2));
 
     }
 
     public float GetArea() {
-        return 0.0f;
+        return (int) (width * large);
     }
 
 }

@@ -11,12 +11,12 @@ public class Square extends FiguraGeometrica {
     }
 
     public float GetPerimeter() {
-        return 0.0f;
+        return (int) (4 * side);
 
     }
 
     public float GetArea() {
-        return 0.0f;
+        return (int) (side * side);
     }
 
 }

@@ -10,12 +10,12 @@ public class Circle extends FiguraGeometrica {
     }
 
     public float GetPerimeter() {
-        return 0.0f;
+        return (float) (2 * Math.PI * radious);
 
     }
 
     public float GetArea() {
-        return 0.0f;
+        return (float) (Math.PI * Math.pow(radious, 2));
     }
 
 }
