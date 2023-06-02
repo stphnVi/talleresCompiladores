@@ -8,12 +8,12 @@ public class RegularTrapezoid extends FiguraGeometrica {
     private Integer side;
 
     // constructor
-    public RegularTrapezoid(String name, Integer base1, Integer base2, Integer height, Integer side) {
+    public RegularTrapezoid(String name, Integer base1, Integer base2, Integer height) {
         super(name);
         this.base1 = base1;
         this.base2 = base2;
         this.height = height;
-        this.side = side;
+        this.side = (int) Math.sqrt(Math.pow(base1, 2) + Math.pow(base2, 2));
     }
 
     public float GetPerimeter() {
